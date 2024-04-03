@@ -15,6 +15,8 @@ class ProductsPage
 
   def go_to_item_page(item)   
     item_link(item).send_keys(:enter)
+    wait = Selenium::WebDriver::Wait.new(timeout: 2, interval: 0.2)
+    wait.until { @driver.current_url.include?('inventory-item.html') }
     ItemPage.new(@driver)
   end
 
