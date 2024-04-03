@@ -36,16 +36,6 @@ class ShoppingCart
     end
   end
 
-  def remove_item(item)
-    item_elements.each do |element|
-      element_text = element.find_element(class: 'inventory_item_name').text
-
-      if element_text == item
-        element.find_element(xpath: "//button[contains(text(), 'REMOVE')]").click
-      end
-    end
-  end
-
   def continue_shopping
     continue_shopping_button.click
   end

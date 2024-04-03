@@ -24,7 +24,6 @@ describe 'Shopping Cart' do
       @item_name = 'Sauce Labs Backpack'
 
       sauce_labs_backpack_page = products_page.go_to_item_page(@item_name)
-      sleep 3
       sauce_labs_backpack_page.add_to_cart
 
       @shopping_cart_page = sauce_labs_backpack_page.toolbar.go_to_shopping_cart
@@ -61,7 +60,7 @@ describe 'Shopping Cart' do
     end
 
     it 'removes item from shopping cart' do
-      @shopping_cart_page.remove_item(@first_item_on_list)
+      @shopping_cart_page.remove_items
       items = @shopping_cart_page.shopping_cart_items
 
       expect(items.empty?).to be true
