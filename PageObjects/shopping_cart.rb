@@ -7,11 +7,14 @@ class ShoppingCart
     @driver = driver
   end
 
+  def item_elements
+    @driver.find_elements(class: 'cart_item')
+  end
+
   def shopping_cart_items
-    items = @driver.find_elements(class: 'cart_item')
     list_of_item_details = []
 
-    items.each do |item|
+    item_elements.each do |item|
       name = item.find_element(class: 'inventory_item_name').text
       description = item.find_element(class: 'inventory_item_desc').text
       price = item.find_element(class: 'inventory_item_price').text
@@ -23,11 +26,33 @@ class ShoppingCart
     list_of_item_details
   end
 
-  def checkout
+  def proceed_to_checkout
     checkout_button.click
-    CheckoutPage.new(@driver)
   end
 
+  def remove_items
+    item_elements.each do |element|
+      element.find_element(xpath: "//button[contains(text(), 'REMOVE')]").click
+    end
+  end
+
+  def remove_item(item)
+    item_elements.each do |element|
+      element_text = element.find_element(class: 'inventory_item_name').text
+
+      if element_text == item
+        element.find_element(xpath: "//button[contains(text(), 'REMOVE')]").click
+      end
+    end
+  end
+
+  def continue_shopping
+    continue_shopping_button.click
+  end
+
+  def continue_shopping_button
+    @driver.find_element(link_text: 'CONTINUE SHOPPING')
+  end
   def checkout_button
     @driver.find_element(link_text: 'CHECKOUT')
   end

@@ -5,9 +5,8 @@ class CheckoutOverviewPage
     @driver = driver
   end
 
-  def finish
+  def finalize_order
     finish_button.click
-    OrderConfirmationPage.new(@driver)
   end
 
   def finish_button

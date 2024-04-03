@@ -7,11 +7,12 @@ require_relative '../DataObjects/customer_information'
 require_relative '../PageObjects/login_page'
 require_relative '../PageObjects/products_page'
 require_relative '../PageObjects/checkout_facade'
+require_relative '../Helpers/browser'
 
 describe 'Shopping Cart' do
   context 'With one item in shopping cart' do
     before(:example) do
-      @driver = Selenium::WebDriver.for :chrome
+      @driver = Browser.new()
       standard_user = StandardUser.new
 
       login_page = LoginPage.new(@driver)
@@ -23,7 +24,7 @@ describe 'Shopping Cart' do
       @item_name = 'Sauce Labs Backpack'
 
       sauce_labs_backpack_page = products_page.go_to_item_page(@item_name)
-
+      sleep 3
       sauce_labs_backpack_page.add_to_cart
 
       @shopping_cart_page = sauce_labs_backpack_page.toolbar.go_to_shopping_cart
@@ -53,6 +54,19 @@ describe 'Shopping Cart' do
       expect(@first_item_on_list.quantity).to eq('1')
     end
 
+    it 'can continue shopping' do
+      @shopping_cart_page.continue_shopping
+      page_url = @driver.current_url
+      expect(page_url).to eql('https://www.saucedemo.com/v1/inventory.html')
+    end
+
+    it 'removes item from shopping cart' do
+      @shopping_cart_page.remove_item(@first_item_on_list)
+      items = @shopping_cart_page.shopping_cart_items
+
+      expect(items.empty?).to be true
+    end
+
     it 'checkout is successful' do
       firstname = 'Matt'
       lastname = 'Johnston'
@@ -60,8 +74,9 @@ describe 'Shopping Cart' do
       customer_information = CustomerInformation.new(firstname, lastname, zip)
 
       checkout_facade = CheckoutFacade.new(@driver)
-      order_confirmation_page = checkout_facade.checkout_with(customer_information)
+      order_confirmation_page = OrderConfirmationPage.new(@driver)
 
+      checkout_facade.checkout_with(customer_information)
       order_confirmation_text = order_confirmation_page.order_confirmation_text
 
       expect(order_confirmation_text).to eq('Your order has been dispatched, and will arrive just as fast as the pony can get there!')

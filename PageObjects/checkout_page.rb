@@ -21,9 +21,8 @@ class CheckoutPage
     @driver.find_element(xpath: "//input[@type='submit']")
   end
 
-  def continue
+  def continue_to_order_overview
     continue_button.click
-    CheckoutOverviewPage.new(@driver)
   end
 
   def fill_customer_information(customer_information)
