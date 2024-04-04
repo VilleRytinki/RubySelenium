@@ -19,11 +19,11 @@ describe 'Shopping Cart' do
       login_page.open
       login_page.login_as(standard_user)
 
-      products_page = ProductsPage.new(@driver)
+      @products_page = ProductsPage.new(@driver)
 
       @item_name = 'Sauce Labs Backpack'
 
-      sauce_labs_backpack_page = products_page.go_to_item_page(@item_name)
+      sauce_labs_backpack_page = @products_page.go_to_item_page(@item_name)
       sauce_labs_backpack_page.add_to_cart
 
       @shopping_cart_page = sauce_labs_backpack_page.toolbar.go_to_shopping_cart
@@ -56,7 +56,7 @@ describe 'Shopping Cart' do
     it 'can continue shopping' do
       @shopping_cart_page.continue_shopping
       page_url = @driver.current_url
-      expect(page_url).to eql('https://www.saucedemo.com/v1/inventory.html')
+      expect(page_url).to eql(@products_page.url)
     end
 
     it 'removes item from shopping cart' do

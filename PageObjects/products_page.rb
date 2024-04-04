@@ -6,11 +6,12 @@ require_relative 'header_toolbar'
 require 'selenium-webdriver'
 
 class ProductsPage
-  attr_accessor :toolbar
+  attr_accessor :toolbar, :url
 
   def initialize(driver)
     @driver = driver
     @toolbar = ToolBar.new(driver)
+    @url = 'https://www.saucedemo.com/v1/inventory.html'
   end
 
   def go_to_item_page(item)   
