@@ -23,10 +23,12 @@ describe 'Shopping Cart' do
 
       @item_name = 'Sauce Labs Backpack'
 
-      sauce_labs_backpack_page = @products_page.go_to_item_page(@item_name)
-      sauce_labs_backpack_page.add_to_cart
+      @products_page.go_to_item_page(@item_name)
 
-      @shopping_cart_page = sauce_labs_backpack_page.toolbar.go_to_shopping_cart
+      @item_page = ItemPage.new(@driver)
+      @item_page.add_to_cart
+
+      @shopping_cart_page = @item_page.toolbar.go_to_shopping_cart
 
 
       items = @shopping_cart_page.shopping_cart_items
@@ -51,6 +53,12 @@ describe 'Shopping Cart' do
 
     it 'the correct quantity is displayed' do
       expect(@first_item_on_list.quantity).to eq('1')
+    end
+
+    it 'displays the item count in shopping cart icon' do
+      item_number = @shopping_cart_page.toolbar.get_item_count_in_shopping_cart_icon
+
+      expect(item_number).to eq('1')
     end
 
     it 'can continue shopping' do
@@ -81,5 +89,35 @@ describe 'Shopping Cart' do
       expect(order_confirmation_text).to eq('Your order has been dispatched, and will arrive just as fast as the pony can get there!')
     end
 
+    context 'When more items are added to the shopping cart' do
+      before(:example) do
+        @shopping_cart_page.continue_shopping
+
+        @new_item = 'Sauce Labs Bike Light'
+        @products_page.go_to_item_page(@new_item)
+  
+        @item_page.add_to_cart
+  
+        @item_page.toolbar.go_to_shopping_cart
+  
+        number_of_items = @shopping_cart_page.toolbar.get_item_count_in_shopping_cart_icon
+
+      end
+
+      it 'increases the number in cart icon when more items are added' do
+        number_of_items = @shopping_cart_page.toolbar.get_item_count_in_shopping_cart_icon
+
+        expect(number_of_items).to eq('2')
+      end
+      
+      it 'removes only one item from the cart when removed' do
+        @shopping_cart_page.remove_item(@new_item)
+
+        item_count = @shopping_cart_page.shopping_cart_items.count
+        sleep 4
+        expect(item_count).to eq(1)
+      end
+      
+    end
   end
 end

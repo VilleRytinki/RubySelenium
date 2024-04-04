@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 require_relative '../DataObjects/item'
-require_relative 'checkout_page'
+require_relative 'header_toolbar'
 
 class ShoppingCart
+  attr_accessor :toolbar
+
   def initialize(driver)
     @driver = driver
+    @toolbar = ToolBar.new(driver)
   end
 
   def item_elements
@@ -36,6 +39,16 @@ class ShoppingCart
     end
   end
 
+  def remove_item(item_name)
+    item_elements.each do |item|
+      name = item.find_element(class: 'inventory_item_name').text
+      if name == item_name
+        puts "element_name: #{name}, item_name: #{item_name}"
+        pricebar = item.find_element(class: "item_pricebar")
+        pricebar.find_element(class: "cart_button").click
+      end
+    end
+  end
   def continue_shopping
     continue_shopping_button.click
   end
