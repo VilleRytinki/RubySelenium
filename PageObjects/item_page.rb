@@ -21,9 +21,8 @@ class ItemPage
     description = @driver.find_element(class: "#{class_prefix}_desc").text
     price = @driver.find_element(class: "#{class_prefix}_price").text
     quantity = nil
-    img_src = ''
 
-    item_details = Item.new(name, description, price, quantity, img_src)
+    item_details = Item.new(name, description, price, quantity)
   end
 
   def add_to_cart

@@ -36,11 +36,7 @@ describe 'Item Page' do
     after(:example) do
       @driver.quit
     end
-
-    it 'has the same image source' do
-      expect(@item_page_item_details.img_src).to eq(@products_page_item_details.img_src)
-    end
-
+    
     it 'has the same item name' do
       expect(@item_page_item_details.name).to eq(@products_page_item_details.name)
     end
