@@ -28,7 +28,7 @@ class ProductsPage
 
   def get_details_for(item_name)
     products = list_of_products
-    
+
     products.find { |product| product.name == item_name}
   end
 
@@ -42,10 +42,9 @@ class ProductsPage
       name = item.find_element(class: "#{class_prefix}_name").text
       description = item.find_element(class: "#{class_prefix}_desc").text
       price = item.find_element(class: "#{class_prefix}_price").text
-      quantity = '1'
-      img_src = item.find_element(class: "#{class_prefix}_img").attribute('src')
+      quantity = nil
 
-      item_details = Item.new(name, description, price, quantity, img_src)
+      item_details = Item.new(name, description, price, quantity)
 
       list_of_product_details.append(item_details)
     end
